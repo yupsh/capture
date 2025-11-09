@@ -1,4 +1,4 @@
-# yup.capture
+# gloo.capture
 
 A command that captures pipeline output to custom `io.Writer` destinations instead of sending to stdout/stderr.
 
@@ -17,7 +17,7 @@ The `capture` command serves as a pipeline sink, allowing you to redirect comman
 import (
     "bytes"
 
-    yup "github.com/yupsh/framework"
+    gloo "github.com/yupsh/framework"
     "github.com/yupsh/capture"
     "github.com/yupsh/grep"
     "github.com/yupsh/pipe"
@@ -36,7 +36,7 @@ func main() {
     )
 
     // Run the pipeline
-    err := yup.Run(pipeline)
+    err := gloo.Run(pipeline)
     if err != nil {
         log.Fatal(err)
     }
@@ -48,7 +48,7 @@ func main() {
 
 ## API
 
-### `Capture(stdout, stderr io.Writer) yup.Command`
+### `Capture(stdout, stderr io.Writer) gloo.Command`
 
 Creates a capture command that routes:
 - stdin → `stdout` writer
@@ -59,7 +59,7 @@ Creates a capture command that routes:
 - `stderr`: `io.Writer` - destination for captured error output
 
 **Returns:**
-- `yup.Command` - a command that can be used in pipelines
+- `gloo.Command` - a command that can be used in pipelines
 
 ## Examples
 
@@ -71,7 +71,7 @@ pipeline := pipe.Pipeline(
     cat.Cat("file.txt"),
     capture.Capture(&out, io.Discard),
 )
-yup.MustRun(pipeline)
+gloo.MustRun(pipeline)
 fmt.Println(out.String())
 ```
 
@@ -84,7 +84,7 @@ pipeline := pipe.Pipeline(
     grep.Grep("pattern"),
     capture.Capture(&combined, &combined),
 )
-yup.MustRun(pipeline)
+gloo.MustRun(pipeline)
 // combined contains both stdout and stderr
 ```
 
@@ -102,7 +102,7 @@ pipeline := pipe.Pipeline(
     grep.Grep("pattern"),
     capture.Capture(multi, os.Stderr),
 )
-yup.MustRun(pipeline)
+gloo.MustRun(pipeline)
 ```
 
 ### Testing with capture
@@ -116,7 +116,7 @@ func TestPipeline(t *testing.T) {
         capture.Capture(&out, &err),
     )
 
-    if err := yup.Run(pipeline); err != nil {
+    if err := gloo.Run(pipeline); err != nil {
         t.Fatal(err)
     }
 
@@ -150,4 +150,3 @@ func TestPipeline(t *testing.T) {
 ## License
 
 GNU Affero General Public License v3.0 - see [LICENSE](LICENSE) file for details.
-

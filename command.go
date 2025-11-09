@@ -4,7 +4,7 @@ import (
 	"context"
 	"io"
 
-	yup "github.com/gloo-foo/framework"
+	gloo "github.com/gloo-foo/framework"
 )
 
 type command struct {
@@ -19,21 +19,21 @@ type command struct {
 // Example:
 //
 //	var stdout, stderr bytes.Buffer
-//	pipeline := yup.Pipe(
+//	pipeline := gloo.Pipe(
 //	    grep.Grep("ERROR"),
 //	    sort.Sort(),
 //	    capture.Capture(&stdout, &stderr),
 //	)
-//	yup.MustRun(pipeline)
+//	gloo.MustRun(pipeline)
 //	// Now stdout and stderr contain the captured output
-func Capture(stdout, stderr io.Writer) yup.Command {
+func Capture(stdout, stderr io.Writer) gloo.Command {
 	return command{
 		stdout: stdout,
 		stderr: stderr,
 	}
 }
 
-func (c command) Executor() yup.CommandExecutor {
+func (c command) Executor() gloo.CommandExecutor {
 	return func(ctx context.Context, stdin io.Reader, _, _ io.Writer) error {
 		// Copy stdin to the provided stdout writer
 		_, err := io.Copy(c.stdout, stdin)
@@ -47,4 +47,3 @@ func (c command) Executor() yup.CommandExecutor {
 		return nil
 	}
 }
-
